@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health Benefits – Ceylon Drop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    :root {
+      --dark-green:#1B4332; --mid-green:#2D6A4F; --accent-green:#52B788;
+      --light-green:#D8F3DC; --gold:#B5A642; --cream:#F5F0E8;
+      --white:#FFFFFF; --text-dark:#1A1A1A; --text-mid:#4A4A4A;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Poppins',sans-serif; background:var(--white); color:var(--text-dark); }
+    h1,h2,h3 { font-family:'Times New Roman',serif; }
+
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:16px 60px; background:rgba(255,255,255,0.97);
+      box-shadow:0 2px 12px rgba(0,0,0,0.08);
+    }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .nav-logo .logo-icon { width:44px; height:44px; }
+    .nav-logo .logo-text h2 { font-size:1.4rem; color:var(--dark-green); letter-spacing:1px; }
+    .nav-logo .logo-text p  { font-size:0.7rem; color:var(--mid-green); letter-spacing:2px; }
+    .nav-links { display:flex; list-style:none; gap:36px; }
+    .nav-links a { text-decoration:none; color:var(--text-dark); font-size:0.9rem; font-weight:500; transition:color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--mid-green); }
+    .btn-primary {
+      background:var(--dark-green); color:var(--white); border:none;
+      padding:10px 24px; border-radius:50px; font-family:'Poppins',sans-serif;
+      font-size:0.88rem; font-weight:500; cursor:pointer; text-decoration:none;
+      display:inline-flex; align-items:center; gap:6px; transition:background 0.3s;
+    }
+    .btn-primary:hover { background:var(--mid-green); }
+    .cart-icon { position:relative; cursor:pointer; font-size:1.4rem; }
+    .cart-badge {
+      position:absolute; top:-6px; right:-6px; background:var(--mid-green); color:white;
+      font-size:0.65rem; width:18px; height:18px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .nav-right { display:flex; align-items:center; gap:16px; }
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; }
+    .hamburger span { width:25px; height:3px; background:var(--dark-green); border-radius:2px; }
+
+    .page-header {
+      margin-top:76px; background:var(--mid-green);
+      padding:80px 60px; text-align:center;
+    }
+    .page-header h1 { color:var(--white); font-size:clamp(2rem,4vw,3rem); margin-bottom:14px; }
+    .page-header p  { color:rgba(255,255,255,0.8); font-size:1rem; max-width:500px; margin:0 auto; line-height:1.7; font-family:'Poppins',sans-serif; }
+
+    /* BENEFITS GRID */
+    .benefits-section { padding:80px 60px; background:var(--cream); }
+    .section-title { font-size:clamp(1.8rem,3vw,2.4rem); color:var(--dark-green); margin-bottom:12px; text-align:center; }
+    .section-sub   { font-size:0.95rem; color:var(--text-mid); max-width:500px; margin:0 auto 50px; line-height:1.7; text-align:center; }
+    .benefits-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; max-width:1100px; margin:0 auto; }
+    .benefit-card {
+      background:var(--white); border-radius:20px; padding:36px 28px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.07); text-align:center;
+      border-top:4px solid var(--accent-green); transition:transform 0.3s, box-shadow 0.3s;
+    }
+    .benefit-card:hover { transform:translateY(-6px); box-shadow:0 10px 36px rgba(0,0,0,0.12); }
+    .benefit-icon { font-size:2.8rem; margin-bottom:18px; }
+    .benefit-card h3 { font-family:'Poppins',sans-serif; font-weight:600; color:var(--dark-green); margin-bottom:12px; font-size:1.05rem; }
+    .benefit-card p  { font-size:0.86rem; color:var(--text-mid); line-height:1.7; }
+
+    /* INGREDIENTS */
+    .ingredients-section { padding:80px 60px; }
+    .ingredients-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:50px;
+      align-items:center; max-width:1000px; margin:0 auto;
+    }
+    .ingredient-list { list-style:none; }
+    .ingredient-list li {
+      display:flex; align-items:flex-start; gap:16px;
+      padding:20px 0; border-bottom:1px solid var(--light-green);
+    }
+    .ingredient-list li:last-child { border-bottom:none; }
+    .ing-icon { font-size:1.8rem; flex-shrink:0; }
+    .ing-info h4 { font-family:'Poppins',sans-serif; font-weight:600; color:var(--dark-green); margin-bottom:4px; }
+    .ing-info p  { font-size:0.85rem; color:var(--text-mid); line-height:1.6; }
+    .ingredients-img {
+      background: linear-gradient(135deg, var(--light-green), var(--accent-green));
+      border-radius:20px; height:400px; display:flex; align-items:center;
+      justify-content:center; font-size:8rem;
+    }
+
+    /* WHY CHOOSE */
+    .why-section {
+      background:var(--dark-green); padding:80px 60px; text-align:center;
+    }
+    .why-section .section-title { color:var(--white); }
+    .why-section .section-sub   { color:rgba(255,255,255,0.75); }
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:28px; max-width:900px; margin:0 auto; }
+    .stat-card { text-align:center; }
+    .stat-number { font-size:3rem; font-family:'Times New Roman',serif; color:var(--accent-green); font-weight:700; }
+    .stat-label  { font-size:0.85rem; color:rgba(255,255,255,0.7); margin-top:6px; }
+
+    /* CTA */
+    .cta-banner { background:var(--mid-green); padding:70px 60px; text-align:center; }
+    .cta-banner h2 { font-size:2.2rem; color:var(--white); margin-bottom:14px; }
+    .cta-banner p  { color:rgba(255,255,255,0.85); margin-bottom:32px; font-size:1rem; }
+
+    footer { background:#0D2218; color:rgba(255,255,255,0.75); padding:50px 60px 30px; }
+    .footer-grid { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:50px; margin-bottom:40px; }
+    .footer-brand h3 { color:var(--white); font-size:1.4rem; margin-bottom:8px; }
+    .footer-brand p  { font-size:0.85rem; line-height:1.7; margin-bottom:16px; }
+    .footer-col h4   { color:var(--white); font-size:0.95rem; font-weight:600; margin-bottom:16px; letter-spacing:1px; }
+    .footer-col ul   { list-style:none; }
+    .footer-col ul li{ margin-bottom:10px; }
+    .footer-col ul li a { color:rgba(255,255,255,0.65); text-decoration:none; font-size:0.88rem; transition:color 0.3s; }
+    .footer-col ul li a:hover { color:var(--accent-green); }
+    .footer-bottom { border-top:1px solid rgba(255,255,255,0.1); padding-top:24px; text-align:center; font-size:0.82rem; color:rgba(255,255,255,0.45); }
+
+    @media (max-width:1024px) {
+      nav,footer { padding-left:30px; padding-right:30px; }
+      .page-header,.benefits-section,.ingredients-section,.why-section,.cta-banner { padding:60px 30px; }
+      .benefits-grid { grid-template-columns:repeat(2,1fr); }
+      .ingredients-grid { grid-template-columns:1fr; }
+      .stats-grid { grid-template-columns:repeat(2,1fr); }
+      .footer-grid { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:640px) {
+      nav { padding:12px 20px; }
+      .nav-links { display:none; }
+      .nav-links.open { display:flex; flex-direction:column; position:fixed; top:68px; left:0; right:0; background:var(--white); padding:20px 30px; box-shadow:0 8px 24px rgba(0,0,0,0.1); gap:20px; z-index:999; }
+      .hamburger { display:flex; }
+      .nav-right .btn-primary { display:none; }
+      .page-header,.benefits-section,.ingredients-section,.why-section,.cta-banner { padding:50px 20px; }
+      .benefits-grid { grid-template-columns:1fr; }
+      .stats-grid    { grid-template-columns:repeat(2,1fr); }
+      .footer-grid   { grid-template-columns:1fr; gap:30px; }
+      footer         { padding:40px 20px 24px; }
+    }
+  
+.logo-img{width:60px;height:60px;object-fit:contain;display:block;}
+</style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">
+<img src="logo.png" alt="Ceylon Drop Logo" class="logo-img">
+<div class="logo-text">
+<h2>CEYLON DROP</h2>
+<p>DROP. STIR. DRINK.</p>
+</div>
+</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="benefits.html" class="active">Benefits</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="cart-icon" onclick="window.location='shop.html'">🛒<span class="cart-badge" id="cartCount">0</span></div>
+      <a href="shop.html" class="btn-primary">Order Now</a>
+    </div>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <div class="page-header">
+    <h1>Health Benefits</h1>
+    <p>Discover why Ceylon Green Tea is one of the healthiest beverages in the world — and how Ceylon Drop makes it effortless.</p>
+  </div>
+
+  <!-- BENEFITS GRID -->
+  <section class="benefits-section">
+    <h2 class="section-title">Why Green Tea?</h2>
+    <p class="section-sub">Ceylon Green Tea has been celebrated for centuries for its remarkable health properties.</p>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">🧬</div>
+        <h3>Rich in Antioxidants</h3>
+        <p>Ceylon Green Tea is packed with powerful antioxidants that help protect your cells from damage caused by free radicals.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🧠</div>
+        <h3>L-Theanine Support</h3>
+        <p>L-Theanine promotes calm focus and mental clarity without the jittery effects of coffee — perfect for productive days.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">⚡</div>
+        <h3>Natural Energy Boost</h3>
+        <p>A gentle, sustained energy boost from natural caffeine — no crash, no anxiety. Just clean, focused energy.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">❤️</div>
+        <h3>Heart Health</h3>
+        <p>Regular consumption of green tea is associated with improved cardiovascular health and lower bad cholesterol levels.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🌿</div>
+        <h3>Natural EGCG</h3>
+        <p>EGCG (Epigallocatechin gallate) is the most potent catechin in green tea, known for its anti-inflammatory properties.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🏃</div>
+        <h3>Metabolism Support</h3>
+        <p>Green tea has been shown to support healthy metabolism and assist with weight management when combined with an active lifestyle.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INGREDIENTS -->
+  <section class="ingredients-section">
+    <h2 class="section-title" style="text-align:center; margin-bottom:14px;">What's Inside Every Capsule</h2>
+    <p class="section-sub" style="text-align:center; margin-bottom:50px;">Pure, simple, and honest ingredients — nothing more, nothing less.</p>
+    <div class="ingredients-grid">
+      <ul class="ingredient-list">
+        <li>
+          <span class="ing-icon">🍵</span>
+          <div class="ing-info">
+            <h4>Ceylon Green Tea Powder</h4>
+            <p>100% pure, whole-leaf Ceylon Green Tea — finely milled to preserve all natural compounds.</p>
+          </div>
+        </li>
+        <li>
+          <span class="ing-icon">🌱</span>
+          <div class="ing-info">
+            <h4>Vegetarian Capsule Shell</h4>
+            <p>Made from plant-based HPMC — no gelatin, no animal products, fully vegetarian and vegan friendly.</p>
+          </div>
+        </li>
+        <li>
+          <span class="ing-icon">🚫</span>
+          <div class="ing-info">
+            <h4>No Additives or Preservatives</h4>
+            <p>We never add fillers, binders, artificial colours, or preservatives. What you see is what you get.</p>
+          </div>
+        </li>
+        <li>
+          <span class="ing-icon">📦</span>
+          <div class="ing-info">
+            <h4>20 Capsules Per Pack</h4>
+            <p>Each pack contains 20 capsules — that's 10 perfect cups of Ceylon green tea, ready in 30 seconds each.</p>
+          </div>
+        </li>
+      </ul>
+      <div class="ingredients-img">🍃</div>
+    </div>
+  </section>
+
+  <!-- WHY STATS -->
+  <section class="why-section">
+    <h2 class="section-title">Ceylon Drop by the Numbers</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,0.75);">Simple facts about what makes our tea special.</p>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Pure Ceylon Tea</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">30s</div>
+        <div class="stat-label">Ready to Drink</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Additives &amp; Preservatives</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">20</div>
+        <div class="stat-label">Capsules Per Pack</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-banner">
+    <h2>Start Your Wellness Journey</h2>
+    <p>Experience the real benefits of pure Ceylon Green Tea — every single day.</p>
+    <a href="shop.html" class="btn-primary" style="font-size:1rem; padding:14px 36px;">🛒 Order Now – Rs. 1,250</a>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>CEYLON DROP</h3>
+        <p>Pure Ceylon Green Tea in every capsule. Made with love from the hills of Sri Lanka.</p>
+        <p>📧 hello@ceylondrop.com<br>📞 +94 77 123 4567</p>
+      </div>
+      <div class="footer-col">
+        <h4>PAGES</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="benefits.html">Benefits</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>FOLLOW US</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">WhatsApp</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 Ceylon Drop. All Rights Reserved.</p></div>
+  </footer>
+
+  <script>
+    $('#hamburger').on('click', function () { $('#navLinks').toggleClass('open'); });
+    var count = localStorage.getItem('cartCount') || 0;
+    $('#cartCount').text(count);
+    $('.benefit-card').css({ opacity:0, transform:'translateY(20px)', transition:'opacity 0.5s ease, transform 0.5s ease' });
+    function reveal() {
+      $('.benefit-card').each(function () {
+        if ($(this).offset().top < $(window).scrollTop() + $(window).height() - 60)
+          $(this).css({ opacity:1, transform:'translateY(0)' });
+      });
+    }
+    $(window).on('scroll', reveal); reveal();
+
+    // Animate stats counter
+    function animateCounter($el, target, suffix) {
+      var current = 0;
+      var step = Math.ceil(target / 50);
+      var timer = setInterval(function () {
+        current += step;
+        if (current >= target) { current = target; clearInterval(timer); }
+        $el.text(current + suffix);
+      }, 30);
+    }
+    var statsAnimated = false;
+    $(window).on('scroll', function () {
+      if (!statsAnimated && $('.stats-grid').offset().top < $(window).scrollTop() + $(window).height()) {
+        statsAnimated = true;
+        animateCounter($('.stat-number').eq(0), 100, '%');
+        animateCounter($('.stat-number').eq(1), 30, 's');
+        animateCounter($('.stat-number').eq(2), 0, '');
+        animateCounter($('.stat-number').eq(3), 20, '');
+      }
+    });
+  </script>
+</body>
+</html>

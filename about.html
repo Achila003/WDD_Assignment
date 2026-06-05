@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us – Ceylon Drop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    :root {
+      --dark-green:   #1B4332;
+      --mid-green:    #2D6A4F;
+      --accent-green: #52B788;
+      --light-green:  #D8F3DC;
+      --gold:         #B5A642;
+      --cream:        #F5F0E8;
+      --white:        #FFFFFF;
+      --text-dark:    #1A1A1A;
+      --text-mid:     #4A4A4A;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Poppins',sans-serif; background:var(--white); color:var(--text-dark); }
+    h1,h2,h3 { font-family:'Times New Roman',serif; }
+
+    /* NAV (same as index) */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:16px 60px;
+      background:rgba(255,255,255,0.97);
+      box-shadow:0 2px 12px rgba(0,0,0,0.08);
+    }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .nav-logo .logo-icon { width:44px; height:44px; }
+    .nav-logo .logo-text h2 { font-size:1.4rem; color:var(--dark-green); letter-spacing:1px; }
+    .nav-logo .logo-text p  { font-size:0.7rem; color:var(--mid-green); letter-spacing:2px; }
+    .nav-links { display:flex; list-style:none; gap:36px; }
+    .nav-links a { text-decoration:none; color:var(--text-dark); font-size:0.9rem; font-weight:500; transition:color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--mid-green); }
+    .btn-primary {
+      background:var(--dark-green); color:var(--white); border:none;
+      padding:10px 24px; border-radius:50px; font-family:'Poppins',sans-serif;
+      font-size:0.88rem; font-weight:500; cursor:pointer; text-decoration:none;
+      display:inline-flex; align-items:center; gap:6px; transition:background 0.3s, transform 0.2s;
+    }
+    .btn-primary:hover { background:var(--mid-green); transform:translateY(-1px); }
+    .cart-icon { position:relative; cursor:pointer; font-size:1.4rem; }
+    .cart-badge {
+      position:absolute; top:-6px; right:-6px;
+      background:var(--mid-green); color:white; font-size:0.65rem;
+      width:18px; height:18px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif;
+    }
+    .nav-right { display:flex; align-items:center; gap:16px; }
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; }
+    .hamburger span { width:25px; height:3px; background:var(--dark-green); border-radius:2px; transition:all 0.3s; }
+
+    /* PAGE HEADER */
+    .page-header {
+      margin-top: 76px;
+      background: var(--dark-green);
+      padding: 80px 60px;
+      text-align: center;
+    }
+    .page-header h1 { color:var(--white); font-size:clamp(2rem,4vw,3rem); margin-bottom:14px; }
+    .page-header p  { color:rgba(255,255,255,0.75); font-size:1rem; max-width:500px; margin:0 auto; line-height:1.7; font-family:'Poppins',sans-serif; }
+
+    /* STORY SECTION */
+    .story-section {
+      padding: 80px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .story-section img { width:100%; border-radius:16px; height:380px; object-fit:cover; }
+    .story-text h2 { color:var(--dark-green); font-size:2rem; margin-bottom:18px; }
+    .story-text h2 span { color:var(--accent-green); }
+    .story-text p  { color:var(--text-mid); line-height:1.8; margin-bottom:16px; font-size:0.95rem; }
+
+    /* MISSION & VALUES */
+    .values-section { background:var(--cream); padding:80px 60px; text-align:center; }
+    .section-title  { font-size:clamp(1.8rem,3vw,2.4rem); color:var(--dark-green); margin-bottom:12px; }
+    .section-sub    { font-size:0.95rem; color:var(--text-mid); max-width:500px; margin:0 auto 50px; line-height:1.7; }
+    .values-grid    { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; max-width:1000px; margin:0 auto; }
+    .value-card {
+      background:var(--white); border-radius:16px; padding:36px 28px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.06); transition:transform 0.3s;
+    }
+    .value-card:hover { transform:translateY(-4px); }
+    .value-icon { font-size:2.4rem; margin-bottom:16px; }
+    .value-card h3 { font-family:'Poppins',sans-serif; font-weight:600; color:var(--dark-green); margin-bottom:10px; font-size:1rem; }
+    .value-card p  { font-size:0.85rem; color:var(--text-mid); line-height:1.6; }
+
+    /* TEAM */
+    .team-section { padding:80px 60px; text-align:center; }
+    .team-grid    { display:grid; grid-template-columns:repeat(3,1fr); gap:30px; max-width:900px; margin:0 auto; }
+    .team-card {
+      border-radius:16px; overflow:hidden;
+      box-shadow:0 4px 20px rgba(0,0,0,0.08); transition:transform 0.3s;
+    }
+    .team-card:hover { transform:translateY(-4px); }
+    .team-avatar {
+      height:160px;
+      background: linear-gradient(135deg, var(--light-green), var(--accent-green));
+      display:flex; align-items:center; justify-content:center;
+      font-size:4rem;
+    }
+    .team-info { padding:20px; background:var(--white); }
+    .team-info h3 { font-family:'Poppins',sans-serif; font-weight:600; color:var(--dark-green); margin-bottom:4px; }
+    .team-info p  { font-size:0.82rem; color:var(--text-mid); }
+
+    /* FOOTER */
+    footer { background:#0D2218; color:rgba(255,255,255,0.75); padding:50px 60px 30px; }
+    .footer-grid { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:50px; margin-bottom:40px; }
+    .footer-brand h3 { color:var(--white); font-size:1.4rem; margin-bottom:8px; }
+    .footer-brand p  { font-size:0.85rem; line-height:1.7; margin-bottom:16px; }
+    .footer-col h4   { color:var(--white); font-size:0.95rem; font-weight:600; margin-bottom:16px; letter-spacing:1px; }
+    .footer-col ul   { list-style:none; }
+    .footer-col ul li{ margin-bottom:10px; }
+    .footer-col ul li a { color:rgba(255,255,255,0.65); text-decoration:none; font-size:0.88rem; transition:color 0.3s; }
+    .footer-col ul li a:hover { color:var(--accent-green); }
+    .footer-bottom { border-top:1px solid rgba(255,255,255,0.1); padding-top:24px; text-align:center; font-size:0.82rem; color:rgba(255,255,255,0.45); }
+
+    /* RESPONSIVE */
+    @media (max-width:1024px) {
+      nav,footer { padding-left:30px; padding-right:30px; }
+      .page-header, .values-section, .team-section { padding:60px 30px; }
+      .story-section { padding:60px 30px; grid-template-columns:1fr; gap:30px; }
+      .story-section img { height:260px; }
+      .values-grid { grid-template-columns:repeat(2,1fr); }
+      .footer-grid { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:640px) {
+      nav { padding:12px 20px; }
+      .nav-links { display:none; }
+      .nav-links.open {
+        display:flex; flex-direction:column; position:fixed;
+        top:68px; left:0; right:0; background:var(--white);
+        padding:20px 30px; box-shadow:0 8px 24px rgba(0,0,0,0.1);
+        gap:20px; z-index:999;
+      }
+      .hamburger { display:flex; }
+      .nav-right .btn-primary { display:none; }
+      .page-header, .values-section, .team-section { padding:50px 20px; }
+      .story-section { padding:50px 20px; }
+      .values-grid { grid-template-columns:1fr; }
+      .team-grid   { grid-template-columns:1fr; }
+      .footer-grid { grid-template-columns:1fr; gap:30px; }
+      footer       { padding:40px 20px 24px; }
+    }
+  
+.logo-img{width:60px;height:60px;object-fit:contain;display:block;}
+</style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+<img src="logo.png" alt="Ceylon Drop Logo" class="logo-img">
+<div class="logo-text">
+<h2>CEYLON DROP</h2>
+<p>DROP. STIR. DRINK.</p>
+</div>
+</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="benefits.html">Benefits</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="cart-icon" onclick="window.location='shop.html'">🛒<span class="cart-badge" id="cartCount">0</span></div>
+      <a href="shop.html" class="btn-primary">Order Now</a>
+    </div>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>About Ceylon Drop</h1>
+    <p>A story rooted in the lush hills of Sri Lanka — where every capsule carries generations of tea heritage.</p>
+  </div>
+
+  <!-- STORY -->
+  <section class="story-section">
+    <img src="plantation.png" alt="Our tea plantation in Sri Lanka" />
+    <div class="story-text">
+      <h2>Our <span>Story</span></h2>
+      <p>Ceylon Drop was born from a deep love for Ceylon Green Tea and a desire to make it accessible to the modern world. Our family has been cultivating tea in the highland regions of Sri Lanka for three generations.</p>
+      <p>The idea was simple: preserve the authentic taste and health benefits of our premium green tea — but make it effortless. No brewing, no tea bags, no mess. Just drop, stir, and drink.</p>
+      <p>Every capsule is made from 100% pure whole-leaf Ceylon Green Tea, carefully processed to retain its natural antioxidants, L-Theanine, and EGCG. Nothing added. Nothing taken away.</p>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="values-section">
+    <h2 class="section-title">Our Values</h2>
+    <p class="section-sub">What we believe in, from the plantation to your cup.</p>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">🌿</div>
+        <h3>Pure &amp; Natural</h3>
+        <p>We never use additives, preservatives, or artificial ingredients. Our tea is exactly as nature intended.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">♻️</div>
+        <h3>Sustainable</h3>
+        <p>Our plant-based vegetarian capsules and eco-conscious packaging reflect our commitment to the planet.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🤝</div>
+        <h3>Community First</h3>
+        <p>We work directly with local tea farmers, ensuring fair wages and sustainable farming practices.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="team-section">
+    <h2 class="section-title">Meet the Team</h2>
+    <p class="section-sub">The people behind every capsule.</p>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">👨‍🌾</div>
+        <div class="team-info">
+          <h3>Kasun Perera</h3>
+          <p>Founder &amp; Head of Cultivation</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">👩‍🔬</div>
+        <div class="team-info">
+          <h3>Dilini Silva</h3>
+          <p>Product Development Lead</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">👨‍💼</div>
+        <div class="team-info">
+          <h3>Roshan Fernando</h3>
+          <p>Sales &amp; Customer Relations</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>CEYLON DROP</h3>
+        <p>Pure Ceylon Green Tea in every capsule. Made with love from the hills of Sri Lanka.</p>
+        <p>📧 hello@ceylondrop.com<br>📞 +94 77 123 4567</p>
+      </div>
+      <div class="footer-col">
+        <h4>PAGES</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="benefits.html">Benefits</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>FOLLOW US</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">WhatsApp</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 Ceylon Drop. All Rights Reserved.</p></div>
+  </footer>
+
+  <script>
+    $('#hamburger').on('click', function () { $('#navLinks').toggleClass('open'); });
+    var count = localStorage.getItem('cartCount') || 0;
+    $('#cartCount').text(count);
+    $('.value-card, .team-card').css({ opacity:0, transform:'translateY(20px)', transition:'opacity 0.5s ease, transform 0.5s ease' });
+    function revealOnScroll() {
+      $('.value-card, .team-card').each(function () {
+        if ($(this).offset().top < $(window).scrollTop() + $(window).height() - 60) {
+          $(this).css({ opacity:1, transform:'translateY(0)' });
+        }
+      });
+    }
+    $(window).on('scroll', revealOnScroll);
+    revealOnScroll();
+  </script>
+</body>
+</html>
